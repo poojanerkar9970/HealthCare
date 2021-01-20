@@ -1,0 +1,126 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2>Enrollment Form</h2>
+            <form #userlogin = "ngForm" (ngSubmit) = "onClickSubmit(userlogin.value)" >
+                <div class=form-group>
+                    <label>Name</label>
+
+                    <input type="text" class="form-control" name="name" [(ngModel)]="model.name" #name="ngModel" [ngClass]="{ 'is-invalid': userlogin.submitted && name.invalid }" required />
+                    
+                    <div *ngIf="userlogin.submitted && name.invalid" class="invalid-feedback">
+                        <div *ngIf="name.errors.required">Name is required</div>
+                    </div>
+                </div>
+                
+                <div class=form-group>
+                    <label>Age</label>
+
+                    <input type="text" class="form-control" name="age" [(ngModel)]="model.age" #age="ngModel" [ngClass]="{ 'is-invalid': userlogin.submitted && age.invalid }" required pattern="[0-9]+"/>
+                    
+                    <div *ngIf="userlogin.submitted && age.invalid" class="invalid-feedback">
+                        <div *ngIf="age.errors.required">Age is required</div>
+                        <div *ngIf="age.errors.pattern">Please enter valid age</div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <br/>
+                    <div [ngClass]="{ 'is-invalid': userlogin.submitted && userlogin.controls.gender?.hasError('required') }">
+                        <div *ngFor="let gender of genders; let isLast = last">
+
+                            <input type="radio" name="gender" [value]="gender" 
+                                ngModel required #myGender="ngModel" 
+                            /> {{ gender }}
+                            
+                        </div>
+                    </div>
+                    
+                    <div *ngIf="userlogin.submitted && userlogin.invalid" class="invalid-feedback">
+                        <div *ngIf="userlogin.controls.gender?.hasError('required')">Gender is required</div>
+                    </div>
+                    
+                </div>
+                
+                <div class=form-group>
+                    <label>Weight</label>
+                    
+                    <input type="text" class="form-control" name="weight" [(ngModel)]="model.weight" #weight="ngModel" [ngClass]="{ 'is-invalid': userlogin.submitted && weight.invalid }" pattern="[0-9]+"/>
+                    
+                    <div *ngIf="userlogin.submitted && weight.invalid" class="invalid-feedback">
+                        <div *ngIf="weight.errors.pattern">Please enter valid weight</div>
+                    </div>
+                </div>
+                
+                <div class=form-group>
+                    <label>Phone Number</label>
+
+                    <input type="text" class="form-control" name="phone" [(ngModel)]="model.phone" #phone="ngModel" [ngClass]="{ 'is-invalid': userlogin.submitted && phone.invalid }" required pattern="^\d{10}$"/>
+                    
+                    <div *ngIf="userlogin.submitted && phone.invalid" class="invalid-feedback">
+                        <div *ngIf="phone.errors.required">Phone is required</div>
+                        <div *ngIf="phone.errors.pattern">Please enter valid phone</div>
+                    </div>
+                </div>
+
+                <div class=form-group>
+                    <label>Profile Picture</label>
+                    
+                    <input #file type="file" accept='image/*' (change)="preview(file.files)" class="form-control" />
+                    <img [src]="imgURL" height="200" *ngIf="imgURL">
+                    <span style="color:red;" *ngIf="message">{{message}}</span>
+                </div>
+
+                <div class=form-group>
+                    <label>Medical History</label>
+                    <select id="history" name="history" #history="ngModel" [(ngModel)]="model.history" class="form-control">
+                        <option value="">Select</option>
+                        <option *ngFor="let optionName of formFields" [value]="optionName">{{optionName}}</option> 
+                    </select>
+                </div>
+
+                <input type = "submit" class="btn btn-primary" value = "Submit">
+            </form>
+        </div>
+        <div class="col-sm-6" [hidden]="!isSubmitted">
+            <h2>Profile</h2>
+            <div class="row" *ngIf="isSubmitted">
+                <div class="col-sm-6">
+                    <label>Name: </label>
+                    <label>{{submittedData.name}}</label>
+                </div>
+                <div class="col-sm-6">
+                    <label>Age: </label>
+                    <label>{{submittedData.age}}</label>
+                </div>
+            </div>
+            <div class="row" *ngIf="isSubmitted">
+                <div class="col-sm-6">
+                    <label>Gender: </label>
+                    <label>{{submittedData.gender}}</label>
+                </div>
+                <div class="col-sm-6" *ngIf="submittedData.weight">
+                    <label>Weight: </label>
+                    <label>{{submittedData.weight}}</label>
+                </div>
+            </div>
+            <div class="row" *ngIf="isSubmitted">
+                <div class="col-sm-6">
+                    <label>Phone Number: </label>
+                    <label>{{submittedData.phone}}</label>
+                </div>
+                <div class="col-sm-6" *ngIf="submittedData.history">
+                    <label>History: </label>
+                    <label>{{submittedData.history}}</label>
+                </div>
+            </div>
+            <div class="row" *ngIf="isSubmitted">
+                <div class="col-sm-6" *ngIf="imgURL">
+                    <label>Profile Picture: </label>
+                    <img [src]="imgURL" height="200" *ngIf="imgURL">
+                </div>                
+            </div>
+        </div>
+    </div>
+</div>
